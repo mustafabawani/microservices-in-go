@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type jsonReponse struct {
+type jsonResponse struct {
 	Error   bool   `json:"error"`
 	Message string `json:"message"`
 	Data    any    `json:"data,omitempty"`
@@ -29,6 +29,7 @@ func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) er
 	if err != io.EOF {
 		return errors.New("body must have only a single json value")
 	}
+	return nil
 }
 
 func (app *Config) writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Header) error {
@@ -41,9 +42,9 @@ func (app *Config) writeJSON(w http.ResponseWriter, status int, data any, header
 			w.Header()[key] = value
 		}
 	}
-	w.Header().set("Content-Type", "application/json")
-	w.writeHeader(status)
-	_, err = w.Wrtie(out)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_, err = w.Write(out)
 	if err != nil {
 		return err
 	}
@@ -56,7 +57,7 @@ func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) er
 	if len(status) > 0 {
 		statusCode = status[0]
 	}
-	var payload jsonReponse
+	var payload jsonResponse
 	payload.Error = true
 	payload.Message = err.Error()
 
