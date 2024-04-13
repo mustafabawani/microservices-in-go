@@ -26,12 +26,13 @@ type Config struct {
 func main() {
 	log.Println("Starting authentication service")
 
-	//connect to db
+	// connect to DB
 	conn := connectToDB()
 	if conn == nil {
-		log.Panic("Cant connect to postgres")
+		log.Panic("Can't connect to Postgres!")
 	}
-	//set up config
+
+	// set up config
 	app := Config{
 		DB: conn,
 		Models: data.New(conn),
@@ -43,23 +44,23 @@ func main() {
 	}
 
 	err := srv.ListenAndServe()
-	if err!=nil{
+	if err != nil {
 		log.Panic(err)
 	}
 }
 
-func openDB(dsn string) (*sql.DB,error){
-	db, err := sql.Open("pgx",dsn)
-	if err!=nil{
-		return nil,err
+func openDB(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("pgx", dsn)
+	if err != nil {
+		return nil, err
 	}
 
 	err = db.Ping()
-	if err!=nil{
-		return nil,err
+	if err != nil {
+		return nil, err
 	}
 
-	return db,nil
+	return db, nil
 }
 
 func connectToDB() *sql.DB {
@@ -67,21 +68,21 @@ func connectToDB() *sql.DB {
 
 	for {
 		connection, err := openDB(dsn)
-		if err!=nil{
-			log.Println("Postgres not yet ready....")
+		if err != nil {
+			log.Println("Postgres not yet ready ...")
 			counts++
-		} else{
-			log.Println("connected to postgres")
+		} else {
+			log.Println("Connected to Postgres!")
 			return connection
 		}
 
-		if counts>10 {
+		if counts > 10 {
 			log.Println(err)
 			return nil
 		}
-		log.Println("backing off for 2mins")
+
+		log.Println("Backing off for two seconds....")
 		time.Sleep(2 * time.Second)
 		continue
 	}
-
 }
