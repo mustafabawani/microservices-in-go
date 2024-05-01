@@ -32,7 +32,7 @@ type Message struct {
 
 func (m *Mail) SendSMTPMessage(msg Message) error {
 	if msg.From == "" {
-		msg.From - m.FromAddress
+		msg.From = m.FromAddress
 	}
 
 	if msg.FromName == "" {
@@ -86,7 +86,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	if err!=nil{
 		return err
 	}
-	
+
 	return nil
 }
 func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
