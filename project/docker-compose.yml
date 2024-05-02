@@ -21,7 +21,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-  mailer-service:
+  mail-service:
     build:
       context: ./../mail-service
       dockerfile: ./../mail-service/mail-service.dockerfile
@@ -37,7 +37,7 @@ services:
       MAIL_USERNAME: ""
       MAIL_PASSWORD: ""
       FROM_NAME: "John Smith"
-      FROM_ADDRESS: "john.smith@example.com"
+      FROM_ADDRESS: john.smith@example.com
 
   authentication-service:
     build:
